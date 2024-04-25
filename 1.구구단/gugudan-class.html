@@ -13,7 +13,6 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.in.js"></script> -->
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script type="text/babel">
-
     class GuGuDan extends React.Component {
         state = {
             first: Math.ceil(Math.random() * 9),
@@ -60,6 +59,7 @@
             );
         }
     }
+
     // ReactDOM.render(<LikeButton />, document.querySelector('#root')); React 17 version
     ReactDOM.createRoot(document.querySelector('#root')).render(
         <GuGuDan />
