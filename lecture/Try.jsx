@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Try = ({ item, index }) => {
+const Try = ({ tryInfo }) => {
     return (
         <li>
-            {index}번째
-            <b>{item.Eng}</b>:{item.Kor}
+            <div>{tryInfo.try}</div>
+            <div>{tryInfo.result}</div>
         </li>
     );
 };

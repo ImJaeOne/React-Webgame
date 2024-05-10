@@ -2,60 +2,81 @@ import React from 'react';
 const { useState, useRef } = React;
 import Try from './Try';
 
+function getNumbers() {
+    const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const array = [];
+    for (let i = 0; i < 4; i += 1) {
+        const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+        array.push(chosen);
+    }
+    return array;
+}
+
 const NumberBaseBall = () => {
     const inputRef = useRef(null);
-    const [first, setFirst] = useState(Math.ceil(Math.random() * 9));
-    const [second, setSecond] = useState(Math.ceil(Math.random() * 9));
-    const [third, setThird] = useState(Math.ceil(Math.random() * 9));
-    const [fourth, setFourth] = useState(Math.ceil(Math.random() * 9));
+    const [value, setValue] = useState('');
     const [tries, setTries] = useState([]);
-    const [answer, setAnswer] = useState('');
+    const [answer, setAnswer] = useState(getNumbers);
     const [result, setResult] = useState('');
-
-    const fruits = [
-        { Eng: 'apple', Kor: '사과' },
-        { Eng: 'banana', Kor: '바나나' },
-        { Eng: 'grape', Kor: '포도' },
-        { Eng: 'orange', Kor: '오렌지' },
-        { Eng: 'bear', Kor: '배' },
-    ];
-
-    const problem = [{ first }, { second }, { third }, { fourth }];
-
+    console.log(tries);
     const onSubmitForm = (e) => {
         e.preventDefault();
-        console.log(typeof `${first}${second}${third}${fourth}`);
-        setAnswer(e.target.children.number.value);
-        setTries(+1);
+        if (value === answer.join('')) {
+            setResult('홈런');
+            setTries((prevTries) => {
+                return [...prevTries, { try: value, result: '홈런]' }];
+            });
 
-        if (e.target.children.number.value === `${first}${second}${third}${fourth}`) {
-            setResult('정답');
-            e.target.children.number.value = '';
+            setValue('');
+            setAnswer(getNumbers());
+            setTries([]);
+            inputRef.current.focus();
         } else {
-            setResult('실패');
-            e.target.children.number.value = '';
+            const answerArray = value.split('').map((v) => parseInt(v));
+            let strike = 0;
+            let ball = 0;
+            if (tries.length >= 9) {
+                setResult(`10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`);
+                setValue('');
+                setAnswer(getNumbers());
+                setTries([]);
+                alert('게임을 다시 시작합니다!');
+                inputRef.current.focus();
+            } else {
+                for (let i = 0; i < 4; i += 1) {
+                    if (answerArray[i] === answer[i]) {
+                        strike += 1;
+                    } else if (answer.includes(answerArray[i])) {
+                        ball += 1;
+                    }
+                }
+                setTries((prevTries) => {
+                    return [...prevTries, { try: value, result: `${strike}스트라이크, ${ball}볼` }];
+                });
+                setValue('');
+                inputRef.current.focus();
+            }
         }
+    };
+
+    const onChangeInput = (e) => {
+        setValue(e.target.value);
     };
 
     return (
         <>
             <h1>숫자 야구</h1>
             <form onSubmit={onSubmitForm}>
-                <input maxLength={4} id="number" ref={inputRef}></input>
+                <input maxLength={4} id="number" ref={inputRef} value={value} onChange={onChangeInput}></input>
                 <button>입력!!</button>
             </form>
-            <div>내가 입력한 답:{answer}</div>
-            <div>
-                {first}
-                {second}
-                {third}
-                {fourth}
-            </div>
             <div>시도 횟수: {tries.length}</div>
-            <div>{result}</div>
+            <div>{answer}</div>
+            <div> {result} </div>
             <ul>
-                {fruits.map((item, index) => {
-                    return <Try key={item.Eng + item.Kor} item={item} index={index} />;
+                {tries.map((v, i) => {
+                    console.log(v);
+                    return <Try key={`${i + 1}차 시도`} tryInfo={v} />;
                 })}
             </ul>
         </>
