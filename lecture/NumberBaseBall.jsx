@@ -18,7 +18,6 @@ const NumberBaseBall = () => {
     const [tries, setTries] = useState([]);
     const [answer, setAnswer] = useState(getNumbers);
     const [result, setResult] = useState('');
-    console.log(tries);
     const onSubmitForm = (e) => {
         e.preventDefault();
         if (value === answer.join('')) {
@@ -26,7 +25,6 @@ const NumberBaseBall = () => {
             setTries((prevTries) => {
                 return [...prevTries, { try: value, result: '홈런]' }];
             });
-
             setValue('');
             setAnswer(getNumbers());
             setTries([]);
@@ -40,7 +38,6 @@ const NumberBaseBall = () => {
                 setValue('');
                 setAnswer(getNumbers());
                 setTries([]);
-                alert('게임을 다시 시작합니다!');
                 inputRef.current.focus();
             } else {
                 for (let i = 0; i < 4; i += 1) {
@@ -76,7 +73,7 @@ const NumberBaseBall = () => {
             <ul>
                 {tries.map((v, i) => {
                     console.log(v);
-                    return <Try key={`${i + 1}차 시도`} tryInfo={v} />;
+                    return <Try key={`${i + 1}차 시도 : ${v.try}`} tryInfo={v} />;
                 })}
             </ul>
         </>
