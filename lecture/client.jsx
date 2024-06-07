@@ -4,8 +4,11 @@ import NumberBaseBall from './NumberBaseBall';
 import ResponseCheck from './ResponseCheck';
 import RSP from './RSP'
 import Test from './RenderTest';
+import Lotto from './Lotto';
+import TicTacToe from './TicTacToe/TicTacToe';
+import MineSearch from './MineSearch/MineSearch';
 
 ReactDOM.render(
-        <RSP />,
+        <MineSearch />,
     document.querySelector('#root')
 );
